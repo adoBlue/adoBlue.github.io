@@ -1,0 +1,33 @@
+#Written by ai (will rewrite when I actually find the time to learn this)
+
+name: workflow.yml
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs at midnight every day
+  workflow_dispatch: # Allows you to run it manually for testing
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Fetch new moss
+        run: python fetch_moss_pics.py
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "MossBot"
+          git config --global user.email "bot@github.com"
+          git add today_moss.jpg
+          git commit -m "Updated daily moss" || exit 0
+          git push
