@@ -17,7 +17,7 @@
         donate to moss-corp <3</p>
         <p>Price to pay </p>
         <p><s>£10,000</s></p>
-        <p><strong>£99.99</strong>to proceed</p>
+        <p><strong>£99.99</strong> to proceed</p>
         <button onclick="fake_pay()" style="padding: 15px 30px; background: #228b22; color: white;
          border: none; font-weight: bold; cursor: pointer; border-radius: 5px;">
             PAY NOW (SPECIAL DEAL)
@@ -31,10 +31,6 @@
     <p> Your official source of moss.</p>
     <p class="counter-text">Day #<span id="day-counter">...<</span></p>
     <img id="moss-image" src="today_moss.jpeg" alt="Moss of today" style="width:100%; max-width: 600px;">
-
-    <div id="moss-container" style="margin-top: 20px;">
-        <button id="moss-button" onclick="moss_button()">Click for Moss Content</button>
-    </div>
 
     <script>
         const timestamp = new Date().getTime();
@@ -50,6 +46,10 @@
 
     <h3>Moss button</h3>
     <p>Have you ever wanted a button on a website? Well Now you can have a button!!</p>
+
+    <div id="moss-container" style="margin-top: 20px;">
+        <button id="moss-button" onclick="moss_button()">Click for Moss Content</button>
+    </div>
 
     <script>
         function moss_button() {
@@ -68,7 +68,7 @@
         function fake_pay() {
             alert("Payment successful, The money was automatically taken from your life" +
                 "savings!");
-            document.getElementById("moss-paywall").style.display = "block";
+            document.getElementById("moss-paywall").style.display = "none";
         }
     </script>
     <p>Warning to users, recently there has been some shady activity,
