@@ -7,11 +7,18 @@
 <body>
     <h1>DAILY DOSE OF MOSS</h1>
     <p> Your official source of moss.</p>
+    <p class="counter-text">Day #<span id="day-counter">...<</span></p>
     <img id="moss-image" src="today_moss.jpeg" alt="Moss of today" style="width:100%; max-width: 600px;">
 
     <script>
+        const timestamp = new Date().getTime();
         const img = document.getElementById("moss-image");
-        img.src = "today_moss.jpeg?v=" + new Date().getTime();
+        img.src = "today_moss.jpeg?v=" + timestamp;
+
+        fetch('moss_count.txt?v=' + timestamp)
+            .then(text => {
+                document.getElementById('day-counter').innerText = text;
+            })
     </script>
 
     <p>Warning to users, recently there has been some shady activity,
