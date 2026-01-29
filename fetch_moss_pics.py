@@ -1,7 +1,7 @@
 import requests
 
 moss_url = "https://loremflickr.com/1080/720/moss"
-
+count_file = "moss_count.txt"
 def download_moss():
     try:
         response = requests.get(moss_url, timeout=10)
