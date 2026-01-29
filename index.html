@@ -92,6 +92,7 @@
     <p>This is your life with moss</p>
     <button>BUY NOW</button>
 </div>
+
 <div id="main-content" class="content-wrapper">
     <h1>DAILY DOSE OF MOSS</h1>
     <p>Your official source of moss.</p>
@@ -159,13 +160,13 @@
         const randomPop = Math.floor(Math.random() * (10000 - 3000) + 3000);
 
         setTimeout(() => {
-            const ad = document.createElement("moss-ad");
+            const ad = document.getElementById("moss-ad");
             ad.style.display = "block";
         }, randomPop);
     }
 
     document.getElementById('close-ad').onclick = function() {
-        document.getElementById('spoof-ad').style.display = 'none';
+        document.getElementById('close-ad').style.display = 'none';
         popup_ad();
     };
 
