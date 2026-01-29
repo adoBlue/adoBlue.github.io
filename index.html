@@ -100,7 +100,9 @@
         source.src = source.getAttribute("data-src");
         video.load();
         video.play();
-        video.style.opacity = "1";
+        setTimeout(() => {
+            video.style.opacity = "1";
+        }, 50);
 
         // Load Image and Counter only after "Payment"
         const timestamp = new Date().getTime();
