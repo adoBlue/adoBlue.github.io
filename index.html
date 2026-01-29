@@ -16,6 +16,7 @@
         img.src = "today_moss.jpeg?v=" + timestamp;
 
         fetch('moss_count.txt?v=' + timestamp)
+            .then(response => response.text())
             .then(text => {
                 document.getElementById('day-counter').innerText = text;
             })
