@@ -1,10 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <style>
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .bg-video {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            overflow: hidden;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+    </style>
     <meta charset="UTF-8">
     <title>Moss today?</title>
 </head>
 <body>
+    <div class="video-container">
+        <video autoplay muted loop playsinline poster="fallback-image.png" class="bg-video">
+            <source src="https://ik.imagekit.io/rmpwvgmau/Moss_on_a_tree_in_green_forest_HD_-_Royalty_Free_Video_The_Collection_1080P.mp4?updatedAt=1769709774751?tr=q-40?tr=w-1280,h-720" type="video/mp4">
+        </video>
+    </div>
 
     <div id="moss-paywall" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.9); color: #00ff00; display: flex; flex-direction: column;
@@ -26,9 +58,11 @@
     </div>
 
 
-
+    <div class="content-wrapper">
     <h1>DAILY DOSE OF MOSS</h1>
     <p> Your official source of moss.</p>
+
+
     <p class="counter-text">Day #<span id="day-counter">...<</span></p>
     <img id="moss-image" src="today_moss.jpeg" alt="Moss of today" style="width:100%; max-width: 600px;">
 
@@ -76,5 +110,7 @@
         do NOT click on this link:</p>
 
     <a href="https://subparplatinum.github.io/Daily-Dose-of-Moss/">Fake moss site</a>
+    </div>
+
 </body>
 </html>
