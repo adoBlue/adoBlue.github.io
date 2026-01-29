@@ -1,6 +1,5 @@
 import requests
 
-# LoremFlickr is a great alternative for keyword-based random images
 moss_url = "https://loremflickr.com/1080/720/moss"
 
 def download_moss():
@@ -10,6 +9,23 @@ def download_moss():
         if response.status_code == 200:
             with open("today_moss.jpeg", "wb") as f:
                 f.write(response.content)
+
+            current_counter = 0
+
+            if os.path.exists(count_file):
+                with open(count_file, "r") as f:
+                    try:
+                        content = f.read().strip()
+                        if content:
+                            current_counter = int(content)
+                    except ValueError:
+                        current_counter = 0
+
+            new_count = current_counter + 1
+
+            with open(count_file, "w") as f:
+                f.write(str(new_count))
+
             print("Success! Your moss image has been saved.")
         else:
             print(f"Error: Server returned status code {response.status_code}")
