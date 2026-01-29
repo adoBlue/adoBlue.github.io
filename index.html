@@ -32,6 +32,29 @@
             display: none; /* Initially hidden */
         }
 
+        .ad-container {
+            display: none; /* Hidden initially */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 320px;
+            padding: 20px;
+            background: white;
+            border: 3px solid #ff0000;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            z-index: 9999;
+            text-align: center;
+        }
+
+        #close-ad {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
         #moss-paywall {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95); color: #00ff00;
@@ -63,12 +86,18 @@
     <source id="video-source" data-src="https://ik.imagekit.io/rmpwvgmau/Moss_on_a_tree_in_green_forest_HD_-_Royalty_Free_Video_The_Collection_1080P.mp4" type="video/mp4">
 </video>
 
+<div id="moss-ad" class="ad-container">
+    <span id="close-ad">&times;</span>
+    <img src="https://ik.imagekit.io/rmpwvgmau/ad.png" alt="Real Ad">
+    <p>This is your life with moss</p>
+    <button>BUY NOW</button>
+</div>
 <div id="main-content" class="content-wrapper">
     <h1>DAILY DOSE OF MOSS</h1>
     <p>Your official source of moss.</p>
 
     <p class="counter-text">Day #<span id="day-counter">Loading...</span></p>
-    <img id="moss-image" src="" alt="Moss of today" style="width:100%; max-width: 600px; border: 2px solid #228b22;">
+    <img id="moss-image" src="" alt="Moss of today" style="width:100%; max-width: 600px; border: 5px solid #228b22;">
 
     <h3>Moss button</h3>
     <p>Have you ever wanted a button on a website? Well now you can have one!!</p>
@@ -125,6 +154,22 @@
                 allow="autoplay; encrypted-media" allowfullscreen>
                 </iframe>`;
     }
+
+    function popup_ad() {
+        const randomPop = Math.floor(Math.random() * (10000 - 3000) + 3000);
+
+        setTimeout(() => {
+            const ad = document.createElement("moss-ad");
+            ad.style.display = "block";
+        }, randomPop);
+    }
+
+    document.getElementById('close-ad').onclick = function() {
+        document.getElementById('spoof-ad').style.display = 'none';
+        popup_ad();
+    };
+
+    window.onload = popup_ad;
 </script>
 </body>
 </html>
