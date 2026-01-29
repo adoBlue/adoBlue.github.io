@@ -5,6 +5,7 @@
     <title>Moss today?</title>
     <style>
         body { margin:0; background: #1a1a1a; font-family: "Comic Sans MS", sans-serif; overflow-x: hidden; }
+        * { box-sizing: border-box; }
 
         .bg-video {
             position: fixed;
@@ -53,6 +54,19 @@
             display: block;
             margin: 10px auto;
         }
+        .spam-box {
+            position: fixed;
+            width: 200px;
+            padding: 15px;
+            background: #ff0000;
+            color: white;
+            border: 4px outset #cc0000;
+            z-index: 10000;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 10px 10px rgba(0,0,0,0.5);
+        }
 
         #close-ad {
             position: absolute;
@@ -60,6 +74,16 @@
             right: 10px;
             cursor: pointer;
             font-weight: bold;
+        }
+
+        .close-spam {
+            position: absolute;
+            top: 0;
+            right: 5px;
+            cursor: pointer;
+            background: black;
+            color: white;
+            padding: 0 5px;
         }
 
         #moss-paywall {
@@ -97,7 +121,7 @@
     <span id="close-ad">&times;</span>
     <img src="https://ik.imagekit.io/rmpwvgmau/ad.png" alt="Real Ad">
     <p>This is your life with moss</p>
-    <button>BUY NOW</button>
+    <button onclick="spam_moss()">BUY NOW</button>
 </div>
 
 <div id="main-content" class="content-wrapper">
@@ -113,6 +137,13 @@
     <div id="moss-container" style="margin-top: 20px;">
         <button id="moss-button" onclick="moss_button()">Click for Moss Content</button>
     </div>
+
+    <ul>
+        <li>Buy moss</li>
+        <li>Never sell your moss</li>
+        <li>Always give us money</li>
+        <li>Feel free to leave a tip!</li>
+    </ul>
 
     <hr style="margin: 40px 0; border: 0; border-top: 1px solid #444;">
     <p style="color: #aaa; font-size: 0.8rem;">Warning: there is an increase in scammers. Do NOT click on this link:
@@ -141,7 +172,6 @@
             video.style.opacity = "1";
         }, 50);
 
-        // Load Image and Counter only after "Payment"
         const timestamp = new Date().getTime();
         document.getElementById("moss-image").src = "today_moss.jpeg?v=" + timestamp;
 
@@ -170,6 +200,42 @@
             const ad = document.getElementById("moss-ad");
             ad.style.display = "block";
         }, randomPop);
+    }
+
+    let spamCount = 0;
+    let initialDelay = 100; // Starting speed (0.1 seconds)
+
+    function spam_moss() {
+        // Start the chaos!
+        spawnSpam();
+    }
+
+    function spawnSpam() {
+        if (spamCount > 50) return; // Limit to 50 boxes so the browser doesn't crash
+
+        // 1. Create the element
+        const spam = document.createElement('div');
+        spam.classList.add('spam-box');
+        spam.innerHTML = `<span class="close-spam" onclick="this.parentElement.remove()">X</span>
+                      <p>BUY MOSS NOW!</p>
+                      <small>Limited Offer #${spamCount}</small>`;
+
+        // 2. Random Position
+        const x = Math.random() * (window.innerWidth - 200);
+        const y = Math.random() * (window.innerHeight - 100);
+        spam.style.left = x + 'px';
+        spam.style.top = y + 'px';
+
+        document.body.appendChild(spam);
+
+        // 3. Increment logic
+        spamCount++;
+
+        // Increase the delay by 100ms every time
+        // First one is 100ms, second 200ms, third 300ms...
+        let nextDelay = initialDelay * spamCount;
+
+        setTimeout(spawnSpam, nextDelay);
     }
 
     document.getElementById('close-ad').onclick = function() {
