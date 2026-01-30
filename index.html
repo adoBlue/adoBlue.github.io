@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<! -- I promise to clean up the html and js -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -124,6 +125,13 @@
     <button onclick="spam_moss()">BUY NOW</button>
 </div>
 
+<div id="moss-ad2" class="ad-container">
+    <span id="close-ad2">&times;</span>
+    <img src="https://ik.imagekit.io/rmpwvgmau/moss_hot.png" alt="Real Ad">
+    <p>Click now for some spicy moss pics</p>
+    <button onclick="redirect_moss()">Locate hot step moss</button>
+</div>
+
 <div id="main-content" class="content-wrapper">
     <h1>DAILY DOSE OF MOSS</h1>
     <p>Your official source of moss.</p>
@@ -193,11 +201,19 @@
                 </iframe>`;
     }
 
+    function redirect_moss() {
+        console.log("Redirect moss page");
+    }
+
     function popup_ad() {
-        const randomPop = Math.floor(Math.random() * (10000 - 3000) + 3000);
+        const randomPop = Math.floor(Math.random() * (20000 - 8000) + 8000);
 
         setTimeout(() => {
-            const ad = document.getElementById("moss-ad");
+            let a = ["moss-ad", "moss-ad2"];
+            let i = Math.floor(Math.random() * a.length);
+            let r = a[i];
+
+            const ad = document.getElementById(r);
             ad.style.display = "block";
         }, randomPop);
     }
@@ -209,6 +225,8 @@
         // Start the chaos!
         spawnSpam();
     }
+
+
 
     function spawnSpam() {
         if (spamCount > 50) return; // Limit to 50 boxes so the browser doesn't crash
@@ -237,6 +255,14 @@
 
         setTimeout(spawnSpam, nextDelay);
     }
+
+
+    document.getElementById('close-ad2').onclick = function() {
+        document.getElementById('moss-ad2').style.display = 'none';
+        const adContainer = document.getElementById('moss-ad');
+        adContainer.style.display = 'none';
+        popup_ad();
+    };
 
     document.getElementById('close-ad').onclick = function() {
         document.getElementById('moss-ad').style.display = 'none';
