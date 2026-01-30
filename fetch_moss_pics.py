@@ -1,4 +1,5 @@
 import requests
+import os
 
 moss_url = "https://loremflickr.com/1080/720/moss"
 count_file = "moss_count.txt"
