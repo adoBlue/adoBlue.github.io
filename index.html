@@ -2,6 +2,10 @@
 <! -- I promise to clean up the html and js -->
 <html lang="en">
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+
     <meta charset="UTF-8">
     <title>Moss Live</title>
     <style>
@@ -32,6 +36,79 @@
             background: rgba(0,0,0,0.5);
             border-radius: 15px;
             display: none;
+        }
+
+        #game-container {
+            display:none;
+            z-index: 9000;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #f8f8f8;
+            border: 8px solid #333;
+            justify-content: space-between;
+            image-rendering: pixelated;
+            overflow: hidden;
+        }
+        .hp-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: #ccc;
+            border: 1px solid #333;
+        }
+
+        .hp-bar-fill {
+            width: 100%;
+            height: 100%;
+            background: #4caf50;
+            transition: width 0.5s;
+        }
+
+        .pokemon {
+            width: 250px;
+            position: absolute;
+            transition: transform 0.1s;
+        }
+
+        #enemy-pkmn { top: 250px; right: 100px; }
+        #player-pkmn { bottom: 100px; left: 40px; }
+
+        .stats-box {
+            position: absolute;
+            width: 200px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 5px;
+            border: 2px solid #333;
+            border-radius: 5px;
+            z-index: 100;
+        }
+
+        #enemy-stats { top: 220px; right: 85px; }
+        #player-stats { bottom: 380px; left: 65px; }
+
+        #dialogue {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 30%;
+            background: #fff;
+            border-top: 4px solid #333;
+            display: none;
+            padding: 15px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        #game-menu {
+            position: absolute;
+            bottom: 30px;
+            width: 100%;
+            height: 100px;
+            background: #fff;
+            border-top: 4px solid #333;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding: 10px;
+            z-index: 20;
         }
 
         .ad-container {
@@ -220,7 +297,6 @@
             background-color: #d32f2f;
         }
 
-
         .swipe-left { transform: translateX(-200%) rotate(-30deg) !important; opacity: 0; }
         .swipe-right { transform: translateX(200%) rotate(30deg) !important; opacity: 0; }
 
@@ -256,7 +332,14 @@
     <span class="close-btn" onclick="close_ad('moss-ad-2')">&times;</span>
     <img src="https://ik.imagekit.io/rmpwvgmau/moss_hot.png" alt="Real Ad">
     <p>Click now for some spicy moss pics</p>
-    <button onclick="startTinderMode()">Locate hot step moss</button>
+    <button onclick="start_tinder_mode()">Locate hot step moss</button>
+</div>
+
+<div id="moss-ad-3" class="ad-container">
+    <span class="close-btn" onclick="close_ad('moss-ad-3')">&times;</span>
+    <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2333480/header.jpg?t=1768256019" alt="Real Ad">
+    <p>PLAY MOSS SHADOW LEGENDS NOW</p>
+    <button onclick="start_pixel_game()">CLICK TO GAIN 1,000,000 POWER NOW</button>
 </div>
 
 <div id="main-content" class="content-wrapper">
@@ -303,12 +386,55 @@
     border: 1px solid #333; color: #333; font-size: 12px; padding: 5px 10px;">Return to being alone forever</button>
 </div>
 
+<div id="game-container">
+    <h1 style="text-align: center; width: 100%; position: absolute; top: 0;">FIGHT FIGHT FIGHT</h1>
+
+    <div id="enemy-stats" class="stats-box">
+        <strong>The mossman</strong> Lv50
+        <div class="hp-bar-bg"><div id="enemy-hp" class="hp-bar-fill"></div></div>
+    </div>
+    <img id="enemy-pkmn" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/114.png" class="pokemon" alt="">
+
+    <div id="player-stats" class="stats-box">
+        <strong>PIKACHU</strong> Lv25
+        <div class="hp-bar-bg"><div id="player-hp" class="hp-bar-fill"></div></div>
+    </div>
+    <img id="player-pkmn" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/470.png" class="pokemon" alt="">
+
+    <div id="game-menu">
+        <button onclick="attack('Absorb', 25)">ABSORB</button>
+        <button onclick="attack('Photosynthesis', 15)">PHOTOSYNTHESIS</button>
+        <button onclick="attack('Consume', 20)">CONSUME</button>
+    </div>
+    <div id="dialogue"></div>
+
+</div>
 <script>
 
     function close_ad(id) {
         document.getElementById(id).style.display = 'none';
         popup_ad();
     }
+
+    let playerHP = 100;
+    let enemyHP = 100;
+    const dialogueEl = document.getElementById('dialogue');
+
+    function showMessage(text, callback) {
+        dialogueEl.style.display = 'block';
+        dialogueEl.innerText = text;
+        setTimeout(() => {
+            dialogueEl.style.display = 'none';
+            if (callback) callback();
+        }, 1500);
+    }
+
+    function attack(moveName, damage) {
+        showMessage(`MOSS used ${moveName}!`, () => {
+            enemyHP = Math.max(0, enemyHP - damage);
+        })
+    }
+
     function fake_pay() {
         alert("Payment successful! The money was automatically taken from your life savings!");
 
@@ -337,7 +463,6 @@
             .then(text => {
                 document.getElementById('day-counter').innerText = text;
             });
-
     }
 
     function play_youtube_video() {
@@ -354,13 +479,18 @@
         const randomPop = Math.floor(Math.random() * (20000 - 8000) + 8000);
 
         setTimeout(() => {
-            let a = ["moss-ad-1", "moss-ad-2"];
+            let a = ["moss-ad-1", "moss-ad-2", "moss-ad-3"];
             let i = Math.floor(Math.random() * a.length);
             let r = a[i];
 
             const ad = document.getElementById(r);
             ad.style.display = "block";
         }, randomPop);
+    }
+
+    function start_pixel_game() {
+        document.getElementById('moss-ad-3').style.display = 'none';
+        document.getElementById('game-container').style.display = 'flex';
     }
 
     let spamCount = 0;
@@ -402,7 +532,7 @@
 
     let currentProfileIndex = 0;
 
-    function startTinderMode() {
+    function start_tinder_mode() {
         // Hide ad
         document.getElementById('moss-ad-2').style.display = 'none';
         // Show Tinder
