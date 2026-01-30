@@ -305,6 +305,8 @@
             border: none; font-weight: bold; cursor: pointer; border-radius: 5px;
             transition: transform 0.2s;
         }
+
+        .button1 {background-color: #90EE90;}
         button:hover { transform: scale(1.05); }
     </style>
 </head>
@@ -390,21 +392,21 @@
     <h1 style="text-align: center; width: 100%; position: absolute; top: 0;">FIGHT FIGHT FIGHT</h1>
 
     <div id="enemy-stats" class="stats-box">
-        <strong>The mossman</strong> Lv50
+        <strong>The mossmon</strong> Lv50
         <div class="hp-bar-bg"><div id="enemy-hp" class="hp-bar-fill"></div></div>
     </div>
     <img id="enemy-pkmn" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/114.png" class="pokemon" alt="">
 
     <div id="player-stats" class="stats-box">
-        <strong>PIKACHU</strong> Lv25
+        <strong>Moss creature</strong> Lv25
         <div class="hp-bar-bg"><div id="player-hp" class="hp-bar-fill"></div></div>
     </div>
     <img id="player-pkmn" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/470.png" class="pokemon" alt="">
 
     <div id="game-menu">
-        <button onclick="attack('Absorb', 25)">ABSORB</button>
-        <button onclick="attack('Photosynthesis', 15)">PHOTOSYNTHESIS</button>
-        <button onclick="attack('Consume', 20)">CONSUME</button>
+        <button class="button1" onclick="attack('Absorb', 25)">ABSORB</button>
+        <button class="button1" onclick="attack('Photosynthesis', 15)">PHOTOSYNTHESIS</button>
+        <button class="button1" onclick="attack('Consume', 20)">CONSUME</button>
     </div>
     <div id="dialogue"></div>
 
@@ -416,23 +418,69 @@
         popup_ad();
     }
 
-    let playerHP = 100;
-    let enemyHP = 100;
-    const dialogueEl = document.getElementById('dialogue');
+    let player_hp = 100;
+    let enemy_hp = 100;
+    let is_battle_over = false;
+    const dialogue_el = document.getElementById('dialogue');
+    const enemy_hp_bar = document.getElementById('enemy-hp');
+    const player_hp_bar = document.getElementById('player-hp');
 
     function showMessage(text, callback) {
-        dialogueEl.style.display = 'block';
-        dialogueEl.innerText = text;
+        dialogue_el.style.display = 'block';
+        dialogue_el.innerText = text;
         setTimeout(() => {
-            dialogueEl.style.display = 'none';
+            if (!is_battle_over) dialogue_el.style.display = 'none';
             if (callback) callback();
         }, 1500);
     }
 
     function attack(moveName, damage) {
-        showMessage(`MOSS used ${moveName}!`, () => {
-            enemyHP = Math.max(0, enemyHP - damage);
+        if (is_battle_over) return;
+        showMessage(`Your moss creature used ${moveName}!`, () => {
+            enemy_hp = Math.max(0, enemy_hp - damage);
+            enemy_hp_bar.style.width = enemy_hp + "%";
+
+            if (enemy_hp <= 0) {
+                end_battle("Mossmon has fainted!")
+            }
+            else {
+                setTimeout(enemy_turn, 500);
+            }
         })
+    }
+
+    function enemy_turn() {
+        if (is_battle_over) return;
+
+        const enemyDamage = Math.floor(Math.random() * 20) + 10;
+
+        document.getElementById('player-pkmn').style.transform = "translateX(10px)";
+        setTimeout(() => document.getElementById('player-pkmn').style.transform = "translateX(0)", 100);
+
+        showMessage(`Enemy Mossmon used Spore Bash!`, () => {
+            player_hp = Math.max(0, player_hp - enemyDamage);
+            player_hp_bar.style.width = player_hp + "%";
+
+            if (player_hp <= 0) {
+                end_battle("Your moss creature fainted... buy more moss to continue.");
+            }
+        });
+    }
+
+    function end_battle(message) {
+        is_battle_over = true;
+        dialogue_el.style.display = 'block';
+        dialogue_el.innerHTML = `<strong>${message}</strong><br><br><button onclick="close_battle()">Return to Site</button>`;
+    }
+
+    function close_battle() {
+        document.getElementById('game-container').style.display = 'none';
+        is_battle_over = false;
+        player_hp = 100;
+        enemy_hp = 100;
+        enemy_hp_bar.style.width = "100%";
+        player_hp_bar.style.width = "100%";
+        popup_ad();
     }
 
     function fake_pay() {
