@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Moss today?</title>
+    <title>Moss Live</title>
     <style>
         body { margin:0; background: #1a1a1a; font-family: "Comic Sans MS", sans-serif; overflow-x: hidden; }
         * { box-sizing: border-box; }
@@ -31,11 +31,11 @@
             margin: 40px auto;
             background: rgba(0,0,0,0.5);
             border-radius: 15px;
-            display: none; /* Initially hidden */
+            display: none;
         }
 
         .ad-container {
-            display: none; /* Hidden initially */
+            display: none;
             position: fixed;
             top: 50%;
             left: 50%;
@@ -69,11 +69,12 @@
             box-shadow: 10px 10px rgba(0,0,0,0.5);
         }
 
-        #close-ad {
+        .close-btn {
             position: absolute;
             top: 5px;
             right: 10px;
             cursor: pointer;
+            color: black;
             font-weight: bold;
         }
 
@@ -97,6 +98,132 @@
             padding: 20px;
         }
 
+        #tinder-overlay {
+            display: none;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+            z-index: 9000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+
+        .tinder-card {
+            width: 300px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .tinder-card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-bottom: 5px solid pink;
+        }
+
+        .tinder-info { padding: 15px; text-align: left; }
+        .tinder-name { font-size: 1.5rem; font-weight: bold; margin: 0; }
+        .tinder-bio { color: #666; font-size: 0.9rem; margin-top: 5px; }
+
+        .tinder-controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn-no {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            display: inline-block;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            margin: 30px;
+            background: transparent;
+            border: none;
+            color: transparent;
+        }
+
+        .btn-no::before,
+        .btn-no::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: #101010;
+            border-radius: 4px;
+        }
+        .btn-no::before {
+            transform: translateY(-50%) rotate(45deg);
+        }
+
+        .btn-no::after {
+            transform: translateY(-50%) rotate(-45deg);
+        }
+
+        .btn-no:hover {
+            transform: scale(1.1);
+        }
+
+        .btn-no:hover::before,
+        .btn-no:hover::after {
+            background: #707070;
+        }
+
+        .btn-yes {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            background-color: #b71c1c;
+            transform: rotate(-45deg);
+            margin: 30px;
+            display: inline-block;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            color: transparent;
+            border: none;
+        }
+        .btn-yes::before,
+        .btn-yes::after {
+            content: "";
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: #d32f2f;
+            border-radius: 50%;
+        }
+
+        .btn-yes::before {
+            top: -25px;
+            left: 0;
+        }
+
+        .btn-yes::after {
+            left: 25px;
+            top: 0;
+        }
+
+        .btn-yes:hover {
+            transform: rotate(-45deg) scale(1.1);
+            background-color: #28a428;
+        }
+
+        .btn-yes:hover::before,
+        .btn-yes:hover::after {
+            background-color: #28a428;
+        }
+
+
+        .swipe-left { transform: translateX(-200%) rotate(-30deg) !important; opacity: 0; }
+        .swipe-right { transform: translateX(200%) rotate(30deg) !important; opacity: 0; }
+
         button {
             padding: 15px 30px; background: #228b22; color: white;
             border: none; font-weight: bold; cursor: pointer; border-radius: 5px;
@@ -118,18 +245,18 @@
     <source id="video-source" data-src="https://ik.imagekit.io/rmpwvgmau/Moss_on_a_tree_in_green_forest_HD_-_Royalty_Free_Video_The_Collection_1080P.mp4" type="video/mp4">
 </video>
 
-<div id="moss-ad" class="ad-container">
-    <span id="close-ad">&times;</span>
+<div id="moss-ad-1" class="ad-container">
+    <span class="close-btn" onclick="close_ad('moss-ad-1')">&times;</span>
     <img src="https://ik.imagekit.io/rmpwvgmau/ad.png" alt="Real Ad">
     <p>This is your life with moss</p>
     <button onclick="spam_moss()">BUY NOW</button>
 </div>
 
-<div id="moss-ad2" class="ad-container">
-    <span id="close-ad2">&times;</span>
+<div id="moss-ad-2" class="ad-container">
+    <span class="close-btn" onclick="close_ad('moss-ad-2')">&times;</span>
     <img src="https://ik.imagekit.io/rmpwvgmau/moss_hot.png" alt="Real Ad">
     <p>Click now for some spicy moss pics</p>
-    <button onclick="redirect_moss()">Locate hot step moss</button>
+    <button onclick="startTinderMode()">Locate hot step moss</button>
 </div>
 
 <div id="main-content" class="content-wrapper">
@@ -143,7 +270,7 @@
     <p>Have you ever wanted a button on a website? Well now you can have one!!</p>
 
     <div id="moss-container" style="margin-top: 20px;">
-        <button id="moss-button" onclick="moss_button()">Click for Moss Content</button>
+        <button id="moss-button" onclick="play_youtube_video()">Click for Moss Content</button>
     </div>
 
     <ul>
@@ -159,7 +286,29 @@
     </p>
 </div>
 
+<div id="tinder-overlay">
+    <div style="margin-bottom: 20px; font-family: 'Arial', sans-serif; font-weight: bold; color: #d63031;">
+        Find your perfect moss
+    </div>
+
+    <div id="card-container">
+    </div>
+
+    <div class="tinder-controls">
+        <button class="btn-no" onclick="swipe('left')"></button>
+        <button class="btn-yes" onclick="swipe('right')"></button>
+    </div>
+
+    <button onclick="closeTinder()" style="margin-top: 30px; background: transparent;
+    border: 1px solid #333; color: #333; font-size: 12px; padding: 5px 10px;">Return to being alone forever</button>
+</div>
+
 <script>
+
+    function close_ad(id) {
+        document.getElementById(id).style.display = 'none';
+        popup_ad();
+    }
     function fake_pay() {
         alert("Payment successful! The money was automatically taken from your life savings!");
 
@@ -191,7 +340,7 @@
 
     }
 
-    function moss_button() {
+    function play_youtube_video() {
         const container = document.getElementById('moss-container');
         const videoId = "BJ5JqVKFzIs";
         container.innerHTML = `
@@ -201,15 +350,11 @@
                 </iframe>`;
     }
 
-    function redirect_moss() {
-        console.log("Redirect moss page");
-    }
-
     function popup_ad() {
         const randomPop = Math.floor(Math.random() * (20000 - 8000) + 8000);
 
         setTimeout(() => {
-            let a = ["moss-ad", "moss-ad2"];
+            let a = ["moss-ad-1", "moss-ad-2"];
             let i = Math.floor(Math.random() * a.length);
             let r = a[i];
 
@@ -219,26 +364,18 @@
     }
 
     let spamCount = 0;
-    let initialDelay = 100; // Starting speed (0.1 seconds)
+    let initialDelay = 100;
+
 
     function spam_moss() {
-        // Start the chaos!
-        spawnSpam();
-    }
+        if (spamCount > 50) return;
 
-
-
-    function spawnSpam() {
-        if (spamCount > 50) return; // Limit to 50 boxes so the browser doesn't crash
-
-        // 1. Create the element
         const spam = document.createElement('div');
         spam.classList.add('spam-box');
         spam.innerHTML = `<span class="close-spam" onclick="this.parentElement.remove()">X</span>
                       <p>BUY MOSS NOW!</p>
                       <small>Limited Offer #${spamCount}</small>`;
 
-        // 2. Random Position
         const x = Math.random() * (window.innerWidth - 200);
         const y = Math.random() * (window.innerHeight - 100);
         spam.style.left = x + 'px';
@@ -246,33 +383,74 @@
 
         document.body.appendChild(spam);
 
-        // 3. Increment logic
         spamCount++;
-
-        // Increase the delay by 100ms every time
-        // First one is 100ms, second 200ms, third 300ms...
         let nextDelay = initialDelay * spamCount;
 
-        setTimeout(spawnSpam, nextDelay);
+        setTimeout(spam_moss, nextDelay);
     }
-
-
-    document.getElementById('close-ad2').onclick = function() {
-        document.getElementById('moss-ad2').style.display = 'none';
-        const adContainer = document.getElementById('moss-ad');
-        adContainer.style.display = 'none';
-        popup_ad();
-    };
-
-    document.getElementById('close-ad').onclick = function() {
-        document.getElementById('moss-ad').style.display = 'none';
-        const adContainer = document.getElementById('moss-ad');
-        adContainer.style.display = 'none';
-        popup_ad();
-    };
 
     window.onload = function() {
         popup_ad();
+    }
+
+    const mossProfiles = [
+        { name: "Sphagnum, 24", bio: "I hold 20x my weight in water.", img: "https://placehold.co/300x300/228b22/fff?text=Sphagnum" },
+        { name: "Polytrichum, 118", bio: "Looking for something long term.", img: "https://placehold.co/300x300/1a472a/fff?text=Polytrichum" },
+        { name: "Oak Moss, 30", bio: "I am technically a lichen but I am pretty open", img: "https://placehold.co/300x300/556b2f/fff?text=Oak+Moss" },
+        { name: "Haircap", bio: "Im tall, Im hot, what's not to love about me", img: "https://placehold.co/300x300/ffcc00/000?text=Haircap" }
+    ];
+
+    let currentProfileIndex = 0;
+
+    function startTinderMode() {
+        // Hide ad
+        document.getElementById('moss-ad-2').style.display = 'none';
+        // Show Tinder
+        document.getElementById('tinder-overlay').style.display = 'flex';
+        renderCard();
+    }
+
+    function closeTinder() {
+        document.getElementById('tinder-overlay').style.display = 'none';
+        popup_ad();
+    }
+
+    function swipe(direction) {
+        const card = document.getElementById('active-card');
+        if(!card) return;
+
+        if (direction === 'left') {
+            card.classList.add('swipe-left');
+        } else {
+            card.classList.add('swipe-right');
+        }
+
+        setTimeout(() => {
+            currentProfileIndex++;
+            renderCard();
+        }, 300);
+    }
+
+    function renderCard() {
+        const container = document.getElementById('card-container');
+
+        if (currentProfileIndex >= mossProfiles.length) {
+            container.innerHTML = `<div class="tinder-card" style="padding:20px; text-align:center;">
+                <h2>No more moss.</h2><p>You are destined to be alone.</p>
+            </div>`;
+            return;
+        }
+
+        const data = mossProfiles[currentProfileIndex];
+        container.innerHTML = `
+            <div id="active-card" class="tinder-card">
+                <img src="${data.img}" alt="${data.name}">
+                <div class="tinder-info">
+                    <div class="tinder-name">${data.name}</div>
+                    <div class="tinder-bio">${data.bio}</div>
+                </div>
+            </div>
+        `;
     }
 </script>
 </body>
