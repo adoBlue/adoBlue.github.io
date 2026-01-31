@@ -9,35 +9,26 @@
     <meta charset="UTF-8">
     <title>Moss Live</title>
     <style>
+        /* I will adjust the colours later */
+        :root {
+            --gb-dark: #2d1b00;
+            --gb-light: #f8f8f8;
+            --hp-green: #50c878;
+            --hp-yellow: #f1c40f;
+            --hp-red: #e74c3c;
+        }
+
+        .bg-video { position: fixed; top: 50%; left: 50%; width: 100%; height: 100%; object-fit: cover; transform: translate(-50%, -50%); opacity: 0; transition: opacity 1s ease-in; z-index: -1; }
+        .content-wrapper { position: relative; z-index: 1; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); padding: 40px; max-width: 800px; margin: 40px auto; background: rgba(0,0,0,0.5); border-radius: 15px; display: none; }
+        .ad-container { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; padding: 20px; background: white; border: 3px solid #ff0000; box-shadow: 0 0 20px rgba(0,0,0,0.5); z-index: 9999; text-align: center; }
+        .ad-container img { max-width: 100%; height: auto; display: block; margin: 10px auto; }
+        .close-btn { position: absolute; top: 5px; right: 10px; cursor: pointer; color: black; font-weight: bold; font-size: 20px;}
+        #moss-paywall { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); color: #00ff00; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; text-align: center; font-family: 'Courier New', Courier, monospace; padding: 20px; }
+
+
         body { margin:0; background: #1a1a1a; font-family: "Comic Sans MS", sans-serif; overflow-x: hidden; }
         * { box-sizing: border-box; }
-
-        .bg-video {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transform: translate(-50%, -50%);
-            opacity: 0;
-            transition: opacity 1s ease-in;
-            z-index: -1;
-        }
-
-        .content-wrapper {
-            position: relative;
-            z-index: 1;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-            padding: 40px;
-            max-width: 800px;
-            margin: 40px auto;
-            background: rgba(0,0,0,0.5);
-            border-radius: 15px;
-            display: none;
-        }
-
+        /* condense down later..*/
         #game-container {
             display:none;
             z-index: 9000;
@@ -110,28 +101,6 @@
             padding: 10px;
             z-index: 20;
         }
-
-        .ad-container {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 500px;
-            padding: 20px;
-            background: white;
-            border: 3px solid #ff0000;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-            z-index: 9999;
-            text-align: center;
-        }
-
-        .ad-container img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 10px auto;
-        }
         .spam-box {
             position: fixed;
             width: 200px;
@@ -146,14 +115,6 @@
             box-shadow: 10px 10px rgba(0,0,0,0.5);
         }
 
-        .close-btn {
-            position: absolute;
-            top: 5px;
-            right: 10px;
-            cursor: pointer;
-            color: black;
-            font-weight: bold;
-        }
 
         .close-spam {
             position: absolute;
@@ -163,16 +124,6 @@
             background: black;
             color: white;
             padding: 0 5px;
-        }
-
-        #moss-paywall {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); color: #00ff00;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            z-index: 9999; text-align: center;
-            font-family: 'Courier New', Courier, monospace;
-            padding: 20px;
         }
 
         #tinder-overlay {
@@ -307,7 +258,47 @@
         }
 
         .button1 {background-color: #90EE90;}
+        .button2 {background: #1a2a6c; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer; transition: 0.3s; }
         button:hover { transform: scale(1.05); }
+
+        .bank-container {
+            display: none;
+            flex-direction: column;
+            z-index: 9000;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 20px;
+            background: #f4f7f6;
+            border-radius: 12px;
+            position: relative;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+        }
+        .bank-welcome {
+            border-bottom: 2px solid #228b22;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
+
+        .account-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .account-type {color: #636e72; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px;}
+
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background-color: #f8f9fa; color: #636e72; font-weight: 600; }
+        .amount-neg { color: #d63031; }
+        .amount-pos { color: #27ae60; }
+
     </style>
 </head>
 
@@ -365,6 +356,8 @@
         <li>Feel free to leave a tip!</li>
     </ul>
 
+    <button onclick="open_bank_page()">Leave a tip!</button>
+
     <hr style="margin: 40px 0; border: 0; border-top: 1px solid #444;">
     <p style="color: #aaa; font-size: 0.8rem;">Warning: there is an increase in scammers. Do NOT click on this link:
         <a href="https://subparplatinum.github.io/Daily-Dose-of-Moss/" style="color: #00ff00;">Fake moss site</a>
@@ -411,6 +404,57 @@
     <div id="dialogue"></div>
 
 </div>
+
+<div id="bank-container" class="bank-container">
+    <div class="bank-welcome">
+        <h2 style="text-align: center; width: 100%; position: absolute; top: 0;">Bank of moss</h2>
+        <button onclick="document.getElementById('bank-container').style.display='none'"
+                style="padding: 5px 10px; background: #888; position: relative; z-index: 1; cursor: pointer;">Close</button>
+        <p>Last login: Jan 14, 1986 at 13:39 PM</p>
+    </div>
+
+    <div>
+        <span class="account-type">Your balance:</span>
+        <div class="balance">£1.99</div>
+    </div>
+
+    <div class="account-card">
+
+        <h3>Recent Transactions</h3>
+        <table>
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Amount</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Jan 29, 2026</td>
+                <td>Moss Inc payment</td>
+                <td>Entertainment</td>
+                <td class="amount-neg">-£99.99</td>
+            </tr>
+            <tr>
+                <td>Jan 28, 2026</td>
+                <td>Remote Work Salary</td>
+                <td>Income</td>
+                <td class="amount-pos">+£3,200.00</td>
+            </tr>
+            <tr>
+                <td>Jan 27, 2026</td>
+                <td>City Power & Light</td>
+                <td>Utilities</td>
+                <td class="amount-neg">-£142.10</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <button class="button2">Move Money</button>
+</div>
+
 <script>
 
     function close_ad(id) {
@@ -513,6 +557,10 @@
             });
     }
 
+    function open_bank_page() {
+        document.getElementById('bank-container').style.display = 'flex';
+
+    }
     function play_youtube_video() {
         const container = document.getElementById('moss-container');
         const videoId = "BJ5JqVKFzIs";
