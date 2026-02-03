@@ -523,6 +523,7 @@
         { name: "Common Carpet Moss", rarity: "C", color: "#50c878", sprite: "assets/moss_waifu_no_1.png"},
         { name: "Uncommon peat", rarity: "R", color: "#bdc3c7", sprite: "assets/moss_waifu_no_2.png" },
         { name: "Rare explosion moss", rarity: "SR", color: "#f1c40f" , sprite: "assets/moss_waifu_no_3.png"},
+        { name: "Sexy body pillow moss", rarity: "SR+", color: "#f12c4f", sprite: "assets/moss_waifu_no_5.png"},
         { name: "ULTRA LEGENDARY PO MOSS", rarity: "SSR", color: "#00ff00" , sprite: "assets/moss_waifu_no_4.png" }
     ];
 
@@ -534,7 +535,8 @@
             const roll = Math.random();
             let result;
 
-            if (roll > 0.95) result = gachaPool[3];
+            if (roll > 0.99) result = gachaPool[4];
+            else if (roll > 0.95) result = gachaPool[3];
             else if (roll > 0.75) result = gachaPool[2];
             else if (roll > 0.4) result = gachaPool[1];
             else result = gachaPool[0];
