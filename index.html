@@ -9,7 +9,8 @@
     <meta charset="UTF-8">
     <title>Moss Live</title>
     <style>
-        /* I will adjust the colours later */
+        /* I will adjust the colours later, fix the ai slop code and change the src so that the images are hosted are on
+        the repo (no need for an external hosting right?) update pokemon and tinder major refactor maybe, hopefully*/
         :root {
             --gb-dark: #2d1b00;
             --gb-light: #f8f8f8;
@@ -29,6 +30,22 @@
         body { margin:0; background: #1a1a1a; font-family: "Comic Sans MS", sans-serif; overflow-x: hidden; }
         * { box-sizing: border-box; }
         /* condense down later..*/
+
+        #gacha-container {
+            display: none;
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:#1a1a1a;
+            z-index:9500;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            color:#fff;
+            font-family:'Pixelify Sans', sans-serif;
+        }
         #game-container {
             display:none;
             z-index: 9000;
@@ -405,6 +422,28 @@
 
 </div>
 
+<div id="moss-pic-display" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:10001; flex-direction:column; align-items:center; justify-content:center;">
+    <div style="position: relative; display: inline-block;">
+        <img src="https://ik.imagekit.io/rmpwvgmau/moss_gambling.webp" alt="Legendary Moss" style="max-width:800px; max-height: 80vh; border:5px solid gold; display: block;">
+
+        <button onclick="transitionToGacha()" style="position: absolute; top: 70%; left: 30%; width: 40%; height: 15%; background: rgba(255,0,0,0); border: none; cursor: pointer; outline: none;"></button>
+    </div>
+    <p style="color: white; font-family: 'Pixelify Sans'; margin-top: 10px;">Click the button in the image to continue...</p>
+</div>
+
+<div id="gacha-container">
+    <h2 style="color: #f1c40f;">GAMBLE TO TIP MEE</h2>
+    <h3>You were too poor to tip me so lets go gambling!</h3>
+    <div id="gacha-display" style="width: 300px; height: 150px; background: #000; border: 3px solid #50c878; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; border-radius: 10px;">
+        <p>Insert your remaining balance</p>
+    </div>
+
+    <div style="display:flex; gap:10px;">
+        <button onclick="pullGacha()" style="background:#f1c40f; color: black;">PULL MOSS</button>
+        <button onclick="closeGacha()" style="background:#e74c3c;">RUN AWAY</button>
+    </div>
+</div>
+
 <div id="bank-container" class="bank-container">
     <div class="bank-welcome">
         <h2 style="text-align: center; width: 100%; position: absolute; top: 0;">Bank of moss</h2>
@@ -452,14 +491,62 @@
             </tbody>
         </table>
     </div>
-    <button class="button2">Move Money</button>
+    <button onclick="run_gacha()" class="button2">Move Money</button>
 </div>
 
 <script>
 
+    let block_ads = false
+
     function close_ad(id) {
         document.getElementById(id).style.display = 'none';
         popup_ad();
+    }
+
+    function run_gacha() {
+        document.getElementById('moss-pic-display').style.display = 'flex';
+        block_ads = true;
+    }
+
+    function transitionToGacha() {
+        document.getElementById('moss-pic-display').style.display = 'none';
+        document.getElementById('gacha-container').style.display = 'flex';
+    }
+
+    function closeGacha() {
+        document.getElementById('gacha-container').style.display = 'none';
+        block_ads = false;
+        popup_ad();
+    }
+
+    const gachaPool = [
+        { name: "Common Carpet Moss", rarity: "C", color: "#50c878", sprite: "assets/moss_waifu_no_1.png"},
+        { name: "Uncommon peat", rarity: "R", color: "#bdc3c7", sprite: "assets/moss_waifu_no_2.png" },
+        { name: "Rare explosion moss", rarity: "SR", color: "#f1c40f" , sprite: "assets/moss_waifu_no_3.png"},
+        { name: "ULTRA LEGENDARY PO MOSS", rarity: "SSR", color: "#00ff00" , sprite: "assets/moss_waifu_no_4.png" }
+    ];
+
+    function pullGacha() {
+        const display = document.getElementById('gacha-display');
+        display.innerHTML = "Pulling...";
+
+        setTimeout(() => {
+            const roll = Math.random();
+            let result;
+
+            if (roll > 0.95) result = gachaPool[3];
+            else if (roll > 0.75) result = gachaPool[2];
+            else if (roll > 0.4) result = gachaPool[1];
+            else result = gachaPool[0];
+
+            display.innerHTML = `
+            <div style="text-align:center;">
+                <h1 style="color:${result.color}; text-shadow: 0 0 10px ${result.color};">[${result.rarity}]</h1>
+                <img src="${result.sprite}" alt="${result.name}"
+                     style="width: 100px; height: 100px; image-rendering: pixelated; border: 2px solid ${result.color}; background: #111; padding: 5px;">
+            </div>
+        `;
+        }, 1200);
     }
 
     let player_hp = 100;
@@ -575,6 +662,11 @@
         const randomPop = Math.floor(Math.random() * (20000 - 8000) + 8000);
 
         setTimeout(() => {
+
+            if (block_ads) {
+                popup_ad();
+                return;
+            }
             let a = ["moss-ad-1", "moss-ad-2", "moss-ad-3"];
             let i = Math.floor(Math.random() * a.length);
             let r = a[i];
